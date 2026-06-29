@@ -30,7 +30,7 @@ Only ports **80** and **443** are exposed publicly. All service-to-service traff
 
 ```bash
 # On the VPS
-git clone https://github.com/<org>/MrBio.git
+git clone https://github.com/<your-username>/MrBio.git
 cd MrBio
 
 # Backend env files (copy from examples and fill in)

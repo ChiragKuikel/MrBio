@@ -8,8 +8,8 @@ Single-VPS deployment of frontend + backend (microservices) behind Caddy with au
 Internet :443
     │
   Caddy (TLS, Let's Encrypt)
-    ├── mrbionepal.com         → frontend (nginx static)
-    └── api.mrbionepal.com     → gateway:3000
+    ├── mrbionp.com         → frontend (nginx static)
+    └── api.mrbionp.com     → gateway:3000
                                   ├── user-auth:3001
                                   ├── communication:3002
                                   ├── activity-log:3003
@@ -22,7 +22,7 @@ Only ports **80** and **443** are exposed publicly. All service-to-service traff
 ## Prerequisites
 
 - VPS with Docker + Docker Compose v2 installed
-- DNS A records: `mrbionepal.com`, `www.mrbionepal.com`, `api.mrbionepal.com` → VPS IP
+- DNS A records: `mrbionp.com`, `www.mrbionp.com`, `api.mrbionp.com` → VPS IP
 - MongoDB Atlas cluster credentials
 - Firewall: allow 22, 80, 443
 
@@ -34,6 +34,7 @@ git clone https://github.com/<your-username>/MrBio.git
 cd MrBio
 
 # Backend env files (copy from examples and fill in)
+cp Ecommerce-Frontend-Mr.Bio/.env.example Ecommerce-Frontend-Mr.Bio/.env
 cp mr-bio-service-mr-bio-setup/.env.example mr-bio-service-mr-bio-setup/.env
 cp mr-bio-service-mr-bio-setup/apps/gateway/.env.example       mr-bio-service-mr-bio-setup/apps/gateway/.env
 cp mr-bio-service-mr-bio-setup/apps/user-auth/.env.example     mr-bio-service-mr-bio-setup/apps/user-auth/.env
@@ -47,7 +48,7 @@ cp mr-bio-service-mr-bio-setup/apps/product/.env.example       mr-bio-service-mr
 #   COMMUNICATION_SERVICE=http://communication:3002
 #   ACTIVITY_LOG_SERVICE=http://activity-log:3003
 
-# Frontend already points to https://api.mrbionepal.com/api/ via its .env
+# Frontend already points to https://api.mrbionp.com/api/ via its .env
 
 # Update Caddyfile email if needed
 nano Caddyfile
@@ -71,9 +72,9 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 ## Service URLs
 
-- Frontend: https://mrbionepal.com
-- API gateway: https://api.mrbionepal.com (matches the frontend's `VITE_BASE_URL`)
-- Health: https://api.mrbionepal.com/user-auth/health
+- Frontend: https://mrbionp.com
+- API gateway: https://api.mrbionp.com (matches the frontend's `VITE_BASE_URL`)
+- Health: https://api.mrbionp.com/user-auth/health
 
 ## Notes
 

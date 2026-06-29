@@ -1,10 +1,10 @@
-# Mr.Bio production stack — single VPS
+# Mr.Bio production stack — single VPS, behind host nginx + Cloudflare
 # Run: docker compose -f docker-compose.prod.yml up -d --build
 #
-# Required files at this directory:
-#   .env                                      (backend env — copy from mr-bio-service-mr-bio-setup/.env.example)
-#   mr-bio-service-mr-bio-setup/apps/*/.env   (each service env — copy from each .env.example)
-#   Caddyfile
+# Host nginx terminates TLS (Cloudflare Origin Cert) and proxies:
+#   mrbionp.com      -> 127.0.0.1:8080  (frontend container)
+#   api.mrbionp.com  -> 127.0.0.1:8081  (gateway container)
+# All other services stay internal-only on the docker network.
 
 x-backend-defaults: &backendDefaults
   init: true
@@ -18,36 +18,19 @@ networks:
   mrbio:
 
 volumes:
-  caddy_data:
-  caddy_config:
   redis_data:
   kafka_data:
   product_assets:
 
 services:
-  caddy:
-    image: caddy:2-alpine
-    container_name: mrbio-caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - mrbio
-    depends_on:
-      - frontend
-      - gateway
-
   frontend:
     container_name: mrbio-frontend
     restart: unless-stopped
     build:
       context: ./Ecommerce-Frontend-Mr.Bio
       dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8080:80"
     networks:
       - mrbio
 
@@ -94,6 +77,8 @@ services:
       args:
         APP: gateway
     command: npm run gateway:start
+    ports:
+      - "127.0.0.1:8081:3000"
     depends_on:
       - user-auth
       - communication

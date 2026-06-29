@@ -1,0 +1,25 @@
+import { Module } from '@nestjs/common';
+import { {{entityNamePascalCase}}Model } from '../../{{featureRoot}}/repository/models/{{entityNameKebabCase}}-model';
+import { {{entityNamePascalCase}}ServiceImpl } from '../../{{featureRoot}}/domain/{{entityNameKebabCase}}-service-impl';
+import { {{entityNamePascalCase}}Controller } from '../../{{featureRoot}}/controllers/{{entityNameKebabCase}}-controller';
+import { {{entityNamePascalCase}}Service } from '../../{{featureRoot}}/domain/abstractions/{{entityNameKebabCase}}-service';
+import { {{entityNamePascalCase}}RepositoryImpl } from '../../{{featureRoot}}/repository/{{entityNameKebabCase}}-repository-impl';
+import { {{entityNamePascalCase}}Repository } from '../../{{featureRoot}}/repository/abstractions/{{entityNameKebabCase}}-repository';
+import { {{entityNamePascalCase}}PersistenceMapper } from '../../{{featureRoot}}/repository/mappers/{{entityNameKebabCase}}-persistence-mapper';
+
+@Module({
+  controllers: [ {{entityNamePascalCase}}Controller],
+  providers: [
+    {
+      provide: {{entityNamePascalCase}}Service,
+      useClass: {{entityNamePascalCase}}ServiceImpl,
+    },
+    {
+      provide: {{entityNamePascalCase}}Repository,
+      useClass: {{entityNamePascalCase}}RepositoryImpl,
+    },
+    {{entityNamePascalCase}}Model,
+    {{entityNamePascalCase}}PersistenceMapper,
+  ],
+})
+export class {{entityNamePascalCase}}Module {}

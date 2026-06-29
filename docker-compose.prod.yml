@@ -1,0 +1,160 @@
+# Mr.Bio production stack — single VPS
+# Run: docker compose -f docker-compose.prod.yml up -d --build
+#
+# Required files at this directory:
+#   .env                                      (backend env — copy from mr-bio-service-mr-bio-setup/.env.example)
+#   mr-bio-service-mr-bio-setup/apps/*/.env   (each service env — copy from each .env.example)
+#   Caddyfile
+
+x-backend-defaults: &backendDefaults
+  init: true
+  restart: unless-stopped
+  env_file:
+    - ./mr-bio-service-mr-bio-setup/.env
+  networks:
+    - mrbio
+
+networks:
+  mrbio:
+
+volumes:
+  caddy_data:
+  caddy_config:
+  redis_data:
+  kafka_data:
+  product_assets:
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: mrbio-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - mrbio
+    depends_on:
+      - frontend
+      - gateway
+
+  frontend:
+    container_name: mrbio-frontend
+    restart: unless-stopped
+    build:
+      context: ./Ecommerce-Frontend-Mr.Bio
+      dockerfile: Dockerfile
+    networks:
+      - mrbio
+
+  redis:
+    image: redis:latest
+    container_name: mrbio-redis
+    restart: unless-stopped
+    env_file:
+      - ./mr-bio-service-mr-bio-setup/.env
+    volumes:
+      - redis_data:/data
+    networks:
+      - mrbio
+    command: sh -c "redis-server --requirepass $$REDIS_PASSWORD"
+
+  kafka:
+    image: bitnami/kafka
+    container_name: mrbio-kafka
+    restart: unless-stopped
+    user: '0:0'
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://kafka:9092,CONTROLLER://localhost:2181
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_KRAFT_CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - kafka_data:/bitnami/kafka
+    networks:
+      - mrbio
+
+  gateway:
+    <<: *backendDefaults
+    container_name: mrbio-gateway
+    build:
+      context: ./mr-bio-service-mr-bio-setup
+      dockerfile: Dockerfile
+      args:
+        APP: gateway
+    command: npm run gateway:start
+    depends_on:
+      - user-auth
+      - communication
+      - activity-log
+      - product
+
+  user-auth:
+    <<: *backendDefaults
+    container_name: mrbio-user-auth
+    build:
+      context: ./mr-bio-service-mr-bio-setup
+      dockerfile: Dockerfile
+      args:
+        APP: user-auth
+    env_file:
+      - ./mr-bio-service-mr-bio-setup/.env
+      - ./mr-bio-service-mr-bio-setup/apps/user-auth/.env
+    command: npm run user-auth:start
+
+  communication:
+    <<: *backendDefaults
+    container_name: mrbio-communication
+    build:
+      context: ./mr-bio-service-mr-bio-setup
+      dockerfile: Dockerfile
+      args:
+        APP: communication
+    env_file:
+      - ./mr-bio-service-mr-bio-setup/.env
+      - ./mr-bio-service-mr-bio-setup/apps/communication/.env
+    command: npm run communication:start
+    depends_on:
+      - kafka
+      - redis
+
+  activity-log:
+    <<: *backendDefaults
+    container_name: mrbio-activity-log
+    build:
+      context: ./mr-bio-service-mr-bio-setup
+      dockerfile: Dockerfile
+      args:
+        APP: activity-log
+    env_file:
+      - ./mr-bio-service-mr-bio-setup/.env
+      - ./mr-bio-service-mr-bio-setup/apps/activity-log/.env
+    command: npm run activity-log:start
+    depends_on:
+      - kafka
+
+  product:
+    <<: *backendDefaults
+    container_name: mrbio-product
+    build:
+      context: ./mr-bio-service-mr-bio-setup
+      dockerfile: Dockerfile
+      args:
+        APP: product
+    env_file:
+      - ./mr-bio-service-mr-bio-setup/.env
+      - ./mr-bio-service-mr-bio-setup/apps/product/.env
+    command: npm run product:start
+    volumes:
+      - product_assets:/app/apps/product/assets

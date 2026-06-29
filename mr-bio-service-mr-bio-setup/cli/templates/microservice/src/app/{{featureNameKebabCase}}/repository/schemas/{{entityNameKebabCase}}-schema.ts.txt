@@ -1,0 +1,7 @@
+import { BaseSchema } from '@mr-bio/core/external-lib';
+
+export interface I{{entityNamePascalCase}} {
+    {{entityNameCamelCase}}Id: string;
+}
+
+export type {{entityNamePascalCase}}Schema = I{{entityNamePascalCase}} & BaseSchema;

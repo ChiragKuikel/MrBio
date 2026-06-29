@@ -1,0 +1,53 @@
+import { Injectable } from '@nestjs/common';
+import { {{entityNamePascalCase}} } from './core/entities/{{entityNameKebabCase}}';
+import { Create{{entityNamePascalCase}}Dto } from './dtos/create-{{entityNameKebabCase}}';
+import { Update{{entityNamePascalCase}}Dto } from './dtos/update-{{entityNameKebabCase}}';
+import { {{entityNamePascalCase}}Repository } from '../repository/abstractions/{{entityNameKebabCase}}-repository';
+import { {{entityNamePascalCase}}Service } from './abstractions/{{entityNameKebabCase}}-service';
+import {
+  FindAllResponse,
+  NotFoundException,
+  ServiceOption,
+  coreErrorMessage,
+  formatModuleMessage,
+  IQuery,
+  CountResponse,
+  ProjectModule,
+} from '@mr-bio/core/shared';
+
+@Injectable()
+export class {{entityNamePascalCase}}ServiceImpl implements {{entityNamePascalCase}}Service {
+  constructor(private {{entityNameCamelCase}}Repository: {{entityNamePascalCase}}Repository) {}
+
+  async create(createDto: Create{{entityNamePascalCase}}Dto, option: ServiceOption): Promise<{{entityNamePascalCase}}> {
+    throw new Error('Method not implemented');
+  }
+
+  async count(query: IQuery, option?: ServiceOption): Promise<CountResponse> {
+    return await this.{{entityNameCamelCase}}Repository.count(query, option);
+  }
+
+  async get(query: IQuery, option: ServiceOption): Promise<FindAllResponse<{{entityNamePascalCase}}>> {
+    return await this.{{entityNameCamelCase}}Repository.findAll(query, option);
+  }
+
+  async getOneById(id: string, option?: ServiceOption): Promise<{{entityNamePascalCase}}> {
+    const {{entityNameCamelCase}} = await this.{{entityNameCamelCase}}Repository.findOneById(id, option);
+    if (!{{entityNameCamelCase}})
+      throw new NotFoundException(formatModuleMessage(coreErrorMessage.MODULE_NOT_FOUND, ProjectModule.{{entityNameSnakeCaseScreaming}}));
+
+    return {{entityNameCamelCase}};
+  }
+
+  async updateById(id: string, updateDto: Update{{entityNamePascalCase}}Dto, option: ServiceOption): Promise<{{entityNamePascalCase}}> {
+    const updated{{entityNamePascalCase}} = await this.{{entityNameCamelCase}}Repository.updateById(id, updateDto, option);
+    if (!updated{{entityNamePascalCase}})
+      throw new NotFoundException(formatModuleMessage(coreErrorMessage.MODULE_NOT_FOUND, ProjectModule.{{entityNameSnakeCaseScreaming}}));
+
+    return updated{{entityNamePascalCase}};
+  }
+
+  async deleteById(id: string, option: ServiceOption): Promise<void> {
+    return await this.{{entityNameCamelCase}}Repository.deleteById(id, option);
+  }
+}

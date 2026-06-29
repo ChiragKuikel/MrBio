@@ -1,0 +1,79 @@
+{
+  "name": "{{microserviceNameKebabCase}}",
+  "version": "0.0.0",
+  "description": "{{microserviceName}} Service",
+  "author": "Novelty Technology LLC",
+  "private": true,
+  "contributors": [
+    "Pragyan Shrestha <pragyan@noveltytechnology.com>",
+    "Sunil Rajbahak <sunil@noveltytechnology.com>",
+    "Ayush Bajracharya <ayush@noveltytechnology.com>",
+    "Suprim Shakya <suprim@noveltytechnology.com>"
+  ],
+  "scripts": {
+    "m:create": "mongo-migrate create",
+    "m:up": "mongo-migrate up",
+    "m:down": "mongo-migrate down",
+    "m:status": "mongo-migrate status",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "node dist/main",
+    "local": "dotenvx run -f .env.local -- nest start --debug 0.0.0.0:{{debuggerPort}} --watch 'node --inspect-brk'",
+    "server": "dotenvx run -f .env -- nest start --debug 0.0.0.0:{{debuggerPort}} --watch 'node --inspect-brk'",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@mr-bio/core": "*",
+    "@dotenvx/dotenvx": "^0.35.1",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.2.1",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/jwt": "^10.2.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.3.0",
+    "cookie-parser": "^1.4.6",
+    "luxon": "^3.4.4",
+    "mongodb": "^6.5.0",
+    "nestjs-zod": "^3.0.0",
+    "pino": "^8.20.0",
+    "pino-pretty": "^11.0.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "@nestjs/schematics": "^10.0.0",
+    "@nestjs/testing": "^10.3.7",
+    "@types/cookie": "^0.6.0",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.2",
+    "@types/lodash": "^4.17.0",
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^20.3.1",
+    "@types/supertest": "^6.0.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    },
+    "testRegex": ".*\\.test\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}

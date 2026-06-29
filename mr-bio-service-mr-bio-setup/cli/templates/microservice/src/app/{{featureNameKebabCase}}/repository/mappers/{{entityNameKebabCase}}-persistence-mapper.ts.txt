@@ -1,0 +1,22 @@
+import { Injectable } from '@nestjs/common';
+import { {{entityNamePascalCase}}Schema } from '../schemas/{{entityNameKebabCase}}-schema';
+import { {{entityNamePascalCase}} } from '../../domain/core/entities/{{entityNameKebabCase}}';
+import { BasePersistenceMapper, withoutAttrs } from '@mr-bio/core/shared';
+
+@Injectable()
+export class {{entityNamePascalCase}}PersistenceMapper extends BasePersistenceMapper<{{entityNamePascalCase}}, {{entityNamePascalCase}}Schema> {
+  domainToPersistence(domain: {{entityNamePascalCase}}): {{entityNamePascalCase}}Schema {
+    return {
+      {{entityNameCamelCase}}Id: domain.id,
+      ...withoutAttrs(domain, ['id']),
+    };
+  }
+
+  persistenceToDomain(persistence: {{entityNamePascalCase}}Schema): {{entityNamePascalCase}} {
+    const domain = new {{entityNamePascalCase}}(persistence.{{entityNameCamelCase}}Id);
+    domain.created = persistence.created;
+    domain.updated = persistence.updated;
+
+    return domain;
+  }
+}

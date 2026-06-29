@@ -1,0 +1,21 @@
+import { Injectable } from '@nestjs/common';
+import { IQuery } from '@mr-bio/core/shared';
+import { {{entityNamePascalCase}} } from '../domain/core/entities/{{entityNameKebabCase}}';
+import { BaseRepositoryImpl } from '@mr-bio/core/external-lib';
+import { {{entityNamePascalCase}}Model } from './models/{{entityNameKebabCase}}-model';
+import { {{entityNamePascalCase}}Schema } from './schemas/{{entityNameKebabCase}}-schema';
+import { {{entityNamePascalCase}}Repository } from './abstractions/{{entityNameKebabCase}}-repository';
+import { {{entityNamePascalCase}}PersistenceMapper } from './mappers/{{entityNameKebabCase}}-persistence-mapper';
+
+@Injectable()
+export class {{entityNamePascalCase}}RepositoryImpl
+  extends BaseRepositoryImpl<{{entityNamePascalCase}}, {{entityNamePascalCase}}Schema, IQuery>
+  implements {{entityNamePascalCase}}Repository
+{
+  constructor(
+    protected model: {{entityNamePascalCase}}Model,
+    protected mapper: {{entityNamePascalCase}}PersistenceMapper
+  ) {
+    super(model, mapper);
+  }
+}

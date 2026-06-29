@@ -1,0 +1,6 @@
+import errorMessage from './messages/error-message';
+import successMessage from './messages/success-message';
+
+export { successMessage, errorMessage };
+
+export const SERVICE_NAME = 'product';

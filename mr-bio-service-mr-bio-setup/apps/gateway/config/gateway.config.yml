@@ -1,0 +1,209 @@
+proxy:
+  action: &proxy
+    changeOrigin: true
+
+defaultPolicies: &defaultPolicies
+  rate-limit: &rate-limit
+    action:
+      max: 1000
+      windowMs: 60000 # 1 minute
+      delayAfter: 500
+  log: &log
+    action:
+      message: ${req.method} ${req.originalUrl}
+  cors: &cors
+    action:
+      origin: true
+      # [${CORS_WHITELIST}] commented to test documentation api from local host during development
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH']
+      credentials: true
+
+http:
+  port: ${GATEWAY_SERVICE_PORT}
+  logLevel: debug
+
+admin:
+  port: ${GATEWAY_ADMIN_PORT}
+  host: ${ADMIN_HOST}
+apiEndpoints:
+  gatewayService:
+    host: ${HOST}
+    paths: ['/api/gateway/', '/api/gateway/*']
+  userAuthService:
+    host: ${HOST}
+    paths:
+      [
+        '/api/user-auth',
+        '/api/user-auth/*',
+        '/api/auth',
+        '/api/auth/*',
+        '/api/users',
+        '/api/users/*',
+        '/api/roles',
+        '/api/roles/*',
+        '/api/resources',
+        '/api/resources/*',
+        '/api/permissions',
+        '/api/permissions/*',
+        '/api/clients',
+        '/api/clients/*',
+      ]
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH']
+
+  communicationService:
+    host: ${HOST}
+    paths:
+      ['/api/communication', '/api/communication/*', '/api/communications', '/api/communications/*']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH']
+
+  activityLogService:
+    host: ${HOST}
+    paths:
+      ['/api/activity-log', '/api/activity-log/*', '/api/activity-logs', '/api/activity-logs/*']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH']
+
+  productService:
+    host: ${HOST}
+    paths:
+      [
+        '/api/product',
+        '/api/product/*',
+        '/api/categories',
+        '/api/categories/*',
+        '/api/add-to-carts',
+        '/api/add-to-carts/*',
+        '/api/orders',
+        '/api/orders/*',
+        '/api/products',
+        '/api/products/*',
+        # '/api/product-settings',
+        # '/api/product-settings/*',
+        # '/api/organization-settings',
+        # '/api/organization-settings/*',
+        # '/api/directory',
+        # '/api/directory/*',
+        # '/api/providers',
+        # '/api/providers/*',
+        # '/api/services',
+        # '/api/services/*',
+        # '/api/master-services',
+        # '/api/master-services/*',
+        # '/api/pricings',
+        # '/api/pricings/*',
+      ]
+
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH']
+
+serviceEndpoints:
+  userAuthService:
+    url: ${USER_AUTH_SERVICE}
+  communicationService:
+    url: ${COMMUNICATION_SERVICE}
+  activityLogService:
+    url: ${ACTIVITY_LOG_SERVICE}
+  productService:
+    url: "http://product:3004"
+
+policies:
+  - health-check
+  - cors
+  - log
+  - proxy
+  - rate-limit
+  - authentication
+
+pipelines:
+  gatewayServicePipeline:
+    apiEndpoints:
+      - gatewayService
+    policies:
+      - health-check:
+
+  userAuthServicePipeline:
+    apiEndpoints:
+      - userAuthService
+    policies:
+      - cors: *cors
+      - rate-limit: *rate-limit
+      - log: *log
+      - authentication:
+          action:
+            unprotectedRoutes:
+              - /api/users
+              - /api/user-auth/docs
+              - /api/user-auth/docs/*
+              - /api/user-auth/health
+              - /api/auth/login
+              - /api/auth/login/mfa
+              - /api/auth/resend-otp
+              - /api/auth/refresh-token
+              - /api/auth/activate-account
+              - /api/auth/otp
+              - /api/auth/otp/verify
+              - /api/auth/users
+              - /api/users/forgot-password
+              - /api/users/reset-password
+              - /api/clients/*/access-token
+              - /api/clients/refresh-token
+      - proxy:
+          action:
+            <<: *proxy
+            serviceEndpoint: userAuthService
+
+  communicationServicePipeline:
+    apiEndpoints:
+      - communicationService
+    policies:
+      - cors: *cors
+      - rate-limit: *rate-limit
+      - log: *log
+      - authentication:
+          action:
+            unprotectedRoutes:
+              - /api/communication/docs
+              - /api/communication/docs/*
+              - /api/communication/health
+      - proxy:
+          action:
+            <<: *proxy
+            serviceEndpoint: communicationService
+
+  activityLogServicePipeline:
+    apiEndpoints:
+      - activityLogService
+    policies:
+      - cors: *cors
+      - rate-limit: *rate-limit
+      - log: *log
+      - authentication:
+          action:
+            unprotectedRoutes:
+              - /api/activity-log/docs
+              - /api/activity-log/docs/*
+              - /api/activity-log/health
+      - proxy:
+          action:
+            <<: *proxy
+            serviceEndpoint: activityLogService
+
+  productServicePipeline:
+    apiEndpoints:
+      - productService
+    policies:
+      - cors: *cors
+      - rate-limit: *rate-limit
+      - log: *log
+      - authentication:
+          action:
+            unprotectedRoutes:
+              - /api/categories
+              - /api/products/count
+              - /api/products
+              - /api/products/*
+              - /api/product/docs
+              - /api/product/docs/*
+              - /api/product/health
+      - proxy:
+          action:
+            <<: *proxy
+            serviceEndpoint: productService

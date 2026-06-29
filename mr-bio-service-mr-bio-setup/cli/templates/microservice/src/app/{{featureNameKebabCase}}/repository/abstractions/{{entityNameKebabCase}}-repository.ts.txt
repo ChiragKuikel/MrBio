@@ -1,0 +1,4 @@
+import { BaseRepository, IQuery } from '@mr-bio/core/shared';
+import { {{entityNamePascalCase}} } from '../../domain/core/entities/{{entityNameKebabCase}}';
+
+export abstract class {{entityNamePascalCase}}Repository extends BaseRepository<{{entityNamePascalCase}}, IQuery> {}

@@ -1,0 +1,161 @@
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
+      rel="stylesheet" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #333;
+        box-sizing: border-box;
+      }
+
+      span {
+        color: #212529;
+      }
+
+      table,
+      th,
+      td {
+        border-collapse: collapse;
+        color: #212529;
+      }
+
+      a {
+        text-decoration: none;
+        color: #67acd5;
+      }
+
+      .chip {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 14px;
+        font-size: 12px;
+        font-weight: 500;
+        display: inline-block;
+        white-space: nowrap;
+        z-index: 10;
+      }
+
+      .PROD {
+        display: none;
+      }
+
+      .DEV {
+        background-color: #4caf50;
+      }
+
+      .QA {
+        background-color: #2196f3;
+      }
+
+      .UAT {
+        background-color: #ff9800;
+      }
+    </style>
+  </head>
+  <body style="background-color: #e9ecf3">
+    <center>
+      <div style="width: 700px">
+        <!-- Header -->
+        <div style="width: 700px; position: relative">
+          <table width="100%" style="background-color: #f8f9fa; position: relative">
+            <tr>
+              <td style="width: 100px"></td>
+              <td align="center">
+                <a
+                  href="https://noveltytechnology.com/"
+                  target="_blank"
+                  style="text-decoration: none">
+                  <img
+                    width="200px"
+                    src="https://dev-api-ems.noveltytechnology.com/icons/logo.png"
+                    style="margin: 30px 0px" />
+                </a>
+              </td>
+              <td
+                align="right"
+                style="width: 100px; padding-right: 20px; padding-top: 20px"
+                valign="top">
+                <div class="chip {{env}}">{{env}}</div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Body -->
+        <table style="width: 100%; padding-bottom: 5px; background-color: white">
+          <tr>
+            <td>
+              <div style="padding: 0px 18px">
+                <p style="color: #212529">
+                  {{bodyContent}}
+                  <br /><br />
+                  <span style="color: #212529">
+                    Best regards,<br />
+                    Mr Bio
+                  </span>
+                </p>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Footer -->
+        <table
+          width="100%"
+          style="height: 156px; background-color: #f8f9fa; padding: 24px 0px 26px 0px">
+          <tr>
+            <td align="center">
+              <span style="font-style: normal; font-weight: 600; line-height: 18px; color: #000000"
+                >Mr Bio</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="center" height="15px">
+              <span
+                style="
+                  font-style: normal;
+                  font-weight: 400;
+                  font-size: 10px;
+                  line-height: 12px;
+                  color: #000000;
+                ">
+                4845 Johnston Oehler Rd Suite D Charlotte, NC 28269
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td align="center">
+              <small
+                style="
+                  font-style: normal;
+                  font-weight: 400;
+                  font-size: 10px;
+                  line-height: 12px;
+                  color: #000000;
+                ">
+                © {{currentYear}} Mr Bio. All rights reserved.
+                <br /><br />
+                <a href="#"> Privacy Policy</a> | <a href="#"> Terms of Use</a>
+              </small>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </center>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
+
+const update{{entityNamePascalCase}}Schema = z.object({}).partial();
+
+export class Update{{entityNamePascalCase}}Body extends createZodDto(update{{entityNamePascalCase}}Schema) {}

@@ -1,0 +1,6 @@
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
+
+const create{{entityNamePascalCase}}Dto = z.object({});
+
+export class Create{{entityNamePascalCase}}Body extends createZodDto(create{{entityNamePascalCase}}Dto) {}

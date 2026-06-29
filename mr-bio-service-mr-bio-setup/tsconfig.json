@@ -1,0 +1,3 @@
+{
+  "extends": "@mr-bio/core/tsconfig-base.json"
+}

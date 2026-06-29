@@ -1,0 +1,10 @@
+db-connection:
+  url: mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_CLUSTER_NAME}/?retryWrites=true&w=majority
+  databaseName: ${MONGO_DB_NAME}
+  options:
+    useNewUrlParser: true
+    useUnifiedTopology: true
+
+migrationsDir: ./src/external-lib/mongo-db/migrations
+changelogCollectionName: migrations
+useDefaultTransaction: false

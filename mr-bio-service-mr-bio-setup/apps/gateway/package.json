@@ -1,0 +1,22 @@
+{
+  "name": "gateway",
+  "description": "Express Gateway Instance Bootstraped from Command Line",
+  "repository": {},
+  "license": "UNLICENSED",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "@mr-bio/core": "*",
+    "axios": "^1.6.8",
+    "data-uri-to-buffer": "^6.0.2",
+    "dotenv": "^16.4.5",
+    "express-gateway": "^1.16.11",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "node ./server.js",
+    "local": "tsc -p . && node --inspect=0.0.0.0:9000 ./server.js",
+    "server": "tsc -p . && node --inspect=0.0.0.0:9000 ./server.js"
+  }
+}

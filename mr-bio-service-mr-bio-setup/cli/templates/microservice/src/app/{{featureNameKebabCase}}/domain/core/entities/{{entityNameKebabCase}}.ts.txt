@@ -1,0 +1,3 @@
+import { BaseEntity } from '@mr-bio/core/shared';
+
+export class {{entityNamePascalCase}} extends BaseEntity {}

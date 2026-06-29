@@ -1,0 +1,16 @@
+import { Injectable } from '@nestjs/common';
+import { {{entityNamePascalCase}}Schema } from '../schemas/{{entityNameKebabCase}}-schema';
+import { dbCollections } from '../../../../external-lib/mongo-db/db-collections';
+import { BaseModel, MongoConnection } from '@mr-bio/core/external-lib';
+
+@Injectable()
+export class {{entityNamePascalCase}}Model extends BaseModel<{{entityNamePascalCase}}Schema> {
+  constructor(mongodbConnection: MongoConnection) {
+    super(mongodbConnection, dbCollections.{{entityNameSnakeCaseScreaming}}, {
+      useSoftDelete: true,
+      searchableFields: [],
+      filterableFields: [],
+      uniqueIdentifierField: '{{entityNameCamelCase}}Id',
+    });
+  }
+}

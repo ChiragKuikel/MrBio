@@ -1,0 +1,17 @@
+import { NestFactory } from '@nestjs/core';
+import { Application } from '@mr-bio/core';
+import { AppModule } from './app/app-module';
+import { SERVICE_NAME } from './shared/constants';
+import { getMongoModelsForRegistration } from './external-lib/mongo-db/register_models';
+
+async function bootstrap() {
+  const nestApp = await NestFactory.create(AppModule);
+  const app = new Application(SERVICE_NAME, nestApp);
+
+  await app.init({
+    mongoDb: true,
+    mongoModelsToRegsiter: getMongoModelsForRegistration(nestApp),
+  });
+}
+
+bootstrap();

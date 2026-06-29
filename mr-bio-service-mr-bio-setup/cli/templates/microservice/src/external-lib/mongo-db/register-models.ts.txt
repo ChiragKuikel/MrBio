@@ -1,0 +1,9 @@
+import { INestApplication } from '@nestjs/common';
+import { ICommonModel } from '@mr-bio/core/external-lib';
+import { {{entityNamePascalCase}}Model } from '../../{{featureRoot}}/repository/models/{{entityNameKebabCase}}-model';
+
+export const getMongoModelsForRegistration = (app: INestApplication<any>): ICommonModel<any>[] => {
+  const {{entityNameCamelCase}}Model = app.get({{entityNamePascalCase}}Model);
+
+  return [{{entityNameCamelCase}}Model];
+};

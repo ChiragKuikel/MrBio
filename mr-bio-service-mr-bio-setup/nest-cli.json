@@ -1,0 +1,49 @@
+{
+  "collection": "@nestjs/schematics",
+  "monorepo": true,
+  "compilerOptions": {
+    "tsConfigPath": "tsconfig.json"
+  },
+  "projects": {
+    "user-auth": {
+      "type": "application",
+      "root": "apps/user-auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/user-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user-auth/tsconfig.json",
+        "deleteOutDir": true
+      }
+    },
+    "communication": {
+      "type": "application",
+      "root": "apps/communication",
+      "entryFile": "main",
+      "sourceRoot": "apps/communication/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/communication/tsconfig.json",
+        "deleteOutDir": true,
+        "assets": [{ "include": "**/*.html", "watchAssets": true }]
+      }
+    },
+    "activity-log": {
+      "type": "application",
+      "root": "apps/activity-log",
+      "entryFile": "main",
+      "sourceRoot": "apps/activity-log/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/activity-log/tsconfig.json",
+        "deleteOutDir": true
+      }
+    },
+    "core": {
+      "type": "library",
+      "root": "packages/core",
+      "entryFile": "index",
+      "sourceRoot": "packages/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "packages/core/tsconfig.json"
+      }
+    }
+  }
+}

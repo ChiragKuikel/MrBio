@@ -1,0 +1,20 @@
+import { Global, Module } from '@nestjs/common';
+import { BaseConfigService } from '@mr-bio/core/shared';
+import { ConfigService } from '../../config/config-service';
+import { {{microserviceNamePascalCase}}ConfigService } from '../../shared/abstractions/{{microserviceNameKebabCase}}-config-service';
+
+@Global()
+@Module({
+  exports: [{{microserviceNamePascalCase}}ConfigService, BaseConfigService],
+  providers: [
+    {
+      useClass: ConfigService,
+      provide: {{microserviceNamePascalCase}}ConfigService,
+    },
+    {
+      useClass: ConfigService,
+      provide: BaseConfigService,
+    },
+  ],
+})
+export class ConfigModule {}

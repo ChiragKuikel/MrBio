@@ -1,0 +1,141 @@
+import { {{entityNamePascalCase}} } from '../domain/core/entities/{{entityNameKebabCase}}';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CountResponse } from '@mr-bio/core/shared';
+import { Create{{entityNamePascalCase}}Body } from './validations/create-{{entityNameKebabCase}}';
+import { Update{{entityNamePascalCase}}Body } from './validations/update-{{entityNameKebabCase}}';
+import { {{entityNamePascalCase}}Service } from '../domain/abstractions/{{entityNameKebabCase}}-service';
+import { AuthEntityDecorator, Authorize, ClientAssignerHeaderDoc } from '@mr-bio/core/external-lib';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  AuthEntity,
+  IHttpResponse,
+  FindAllResponse,
+  IQuery,
+  UnitOfWork,
+  buildHttpResponse,
+  coreSuccessMessage,
+  formatModuleMessage,
+  ProjectModule,
+} from '@mr-bio/core/shared';
+
+@ApiTags(ProjectModule.{{entityNameSnakeCaseScreaming}})
+@Controller('{{entityNameKebabCase}}s')
+export class {{entityNamePascalCase}}Controller {
+  constructor(
+    private {{entityNameCamelCase}}Service: {{entityNamePascalCase}}Service,
+    private unitOfWork: UnitOfWork,
+  ) {}
+
+  @ApiBearerAuth('JWT')
+  @Authorize({
+    resourcePermission: { resource: '{{entityNameKebabCaseScreaming}}-MANAGEMENT', permissions: ['{{entityNameKebabCaseScreaming}}-MANAGEMENT-CREATE'] },
+  })
+  @ClientAssignerHeaderDoc()
+  @Post()
+  async create{{entityNamePascalCase}}(
+    @Body() body: Create{{entityNamePascalCase}}Body,
+    @AuthEntityDecorator() authEntity: AuthEntity
+  ): Promise<IHttpResponse<{{entityNamePascalCase}}>> {
+    return await this.unitOfWork.execute(async session => {
+      const responseData = await this.{{entityNameCamelCase}}Service.create(body, { session, authEntity })
+      
+      return buildHttpResponse(
+        responseData,
+        formatModuleMessage(coreSuccessMessage.MODULE_CREATE_SUCCESS, ProjectModule.{{entityNameSnakeCaseScreaming}})
+      );
+    });
+  }
+
+  @ApiBearerAuth('JWT')
+  @Authorize({
+    resourcePermission: { resource: '{{entityNameKebabCaseScreaming}}-MANAGEMENT', permissions: ['{{entityNameKebabCaseScreaming}}-MANAGEMENT-READ'] },
+  })
+  @Get('/count')
+  async count(
+    @Query() query: IQuery,
+    @AuthEntityDecorator() authEntity: AuthEntity
+  ): Promise<IHttpResponse<CountResponse>> {
+    const responseData = await this.{{entityNameCamelCase}}Service.count(query, { authEntity });
+
+    return buildHttpResponse(
+      responseData,
+      formatModuleMessage(coreSuccessMessage.MODULE_COUNT_FETCH_SUCCESS, ProjectModule.{{entityNameKebabCaseScreaming}})
+    );
+  }
+
+  @ApiBearerAuth('JWT')
+  @Authorize({
+    resourcePermission: { resource: '{{entityNameKebabCaseScreaming}}-MANAGEMENT', permissions: ['{{entityNameKebabCaseScreaming}}-MANAGEMENT-READ'] },
+  })
+  @Get()
+  async get(
+    @Query() query: IQuery,
+    @AuthEntityDecorator() authEntity: AuthEntity
+  ): Promise<IHttpResponse<FindAllResponse<{{entityNamePascalCase}}>>> {
+    const responseData = await this.{{entityNameCamelCase}}Service.get(query, { authEntity })
+
+    return buildHttpResponse(
+      responseData,
+      formatModuleMessage(coreSuccessMessage.MODULE_FETCH_SUCCESS, ProjectModule.{{entityNameSnakeCaseScreaming}})
+    );
+  }
+
+  @Authorize({
+    resourcePermission: {
+      resource: '{{entityNameKebabCaseScreaming}}-MANAGEMENT',
+      permissions: ['{{entityNameKebabCaseScreaming}}-MANAGEMENT-READ'],
+    },
+  })
+  @ApiBearerAuth('JWT')
+  @Get('/:id')
+  async getOneById(
+    @Param('id') id: string,
+    @AuthEntityDecorator() authEntity: AuthEntity
+  ): Promise<IHttpResponse<{{entityNamePascalCase}}>> {
+    const responseData = await this.{{entityNameCamelCase}}Service.getOneById(id, { authEntity })
+
+    return buildHttpResponse(
+      responseData,
+      formatModuleMessage(coreSuccessMessage.MODULE_VIEW_SUCCESS, ProjectModule.{{entityNameSnakeCaseScreaming}})
+    );
+  }
+
+  @ApiBearerAuth('JWT')
+  @Patch('/:id')
+  @Authorize({
+    resourcePermission: { resource: '{{entityNameKebabCaseScreaming}}-MANAGEMENT', permissions: ['{{entityNameKebabCaseScreaming}}-MANAGEMENT-UPDATE'] },
+  })
+  async updateById(
+    @Param('id') id: string,
+    @Body() body: Update{{entityNamePascalCase}}Body,
+    @AuthEntityDecorator() authEntity: AuthEntity
+  ): Promise<IHttpResponse<{{entityNamePascalCase}}>> {
+    return await this.unitOfWork.execute(async session => {
+      const responseData = await this.{{entityNameCamelCase}}Service.updateById(id, body, { session, authEntity })
+
+      return buildHttpResponse(
+        responseData,
+        formatModuleMessage(coreSuccessMessage.MODULE_UPDATE_SUCCESS, ProjectModule.{{entityNameSnakeCaseScreaming}})
+      );
+    });
+  }
+
+  @ApiBearerAuth('JWT')
+  @Authorize({
+    resourcePermission: { resource: '{{entityNameKebabCaseScreaming}}-MANAGEMENT', permissions: ['{{entityNameKebabCaseScreaming}}-MANAGEMENT-DELETE'] },
+  })
+  @Delete('/:id')
+  async deleteById(
+    @Param('id') id: string,
+    @AuthEntityDecorator() authEntity: AuthEntity
+  ): Promise<IHttpResponse<void>> {
+    return await this.unitOfWork.execute(async session => {
+      const responseData = await this.{{entityNameCamelCase}}Service.deleteById(id, { session, authEntity });
+
+      return buildHttpResponse(
+        responseData,
+        formatModuleMessage(coreSuccessMessage.MODULE_DELETE_SUCCESS, ProjectModule.{{entityNameSnakeCaseScreaming}})
+      );
+    });
+  }
+}

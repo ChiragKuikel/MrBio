@@ -1,0 +1,6 @@
+import { {{entityNamePascalCase}} } from '../core/entities/{{entityNameKebabCase}}';
+import { Create{{entityNamePascalCase}}Dto } from '../dtos/create-{{entityNameKebabCase}}';
+import { Update{{entityNamePascalCase}}Dto } from '../dtos/update-{{entityNameKebabCase}}';
+import { BaseService, IQuery } from '@mr-bio/core/shared';
+
+export abstract class {{entityNamePascalCase}}Service extends BaseService<{{entityNamePascalCase}}, Create{{entityNamePascalCase}}Dto, Update{{entityNamePascalCase}}Dto, IQuery> {}

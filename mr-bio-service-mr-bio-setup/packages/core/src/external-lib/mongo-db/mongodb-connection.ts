@@ -97,7 +97,11 @@ function resolveURI(mongoDbConfig: IDbConfig) {
   if (mongoDbConfig.protocol === 'mongodb' && mongoDbConfig.port) {
     connectionString += `:${mongoDbConfig.port}/${mongoDbConfig.dbName}`;
   }
-  connectionString += '?retryWrites=true&w=majority&directConnection=true';
+  if (mongoDbConfig.protocol === 'mongodb+srv') {
+    connectionString += '?retryWrites=true&w=majority';
+  } else {
+    connectionString += '?retryWrites=true&w=majority&directConnection=true';
+  }
 
   return connectionString;
 }

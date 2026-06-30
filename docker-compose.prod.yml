@@ -75,7 +75,7 @@ services:
       dockerfile: Dockerfile
       args:
         APP: gateway
-    command: node apps/gateway/dist/main.js
+    command: node apps/gateway/server.js
     ports:
       - "127.0.0.1:8081:3000"
     depends_on:

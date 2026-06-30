@@ -27,10 +27,8 @@ admin:
   host: ${ADMIN_HOST}
 apiEndpoints:
   gatewayService:
-    host: ${HOST}
     paths: ['/api/gateway/', '/api/gateway/*']
   userAuthService:
-    host: ${HOST}
     paths:
       [
         '/api/user-auth',
@@ -51,19 +49,16 @@ apiEndpoints:
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH']
 
   communicationService:
-    host: ${HOST}
     paths:
       ['/api/communication', '/api/communication/*', '/api/communications', '/api/communications/*']
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH']
 
   activityLogService:
-    host: ${HOST}
     paths:
       ['/api/activity-log', '/api/activity-log/*', '/api/activity-logs', '/api/activity-logs/*']
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH']
 
   productService:
-    host: ${HOST}
     paths:
       [
         '/api/product',

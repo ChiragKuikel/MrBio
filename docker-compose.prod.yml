@@ -80,6 +80,7 @@ services:
       - "127.0.0.1:8081:3000"
     volumes:
       - ./mr-bio-service-mr-bio-setup/apps/gateway/.env:/app/.env:ro
+      - ./mr-bio-service-mr-bio-setup/apps/gateway/config:/app/apps/gateway/config:ro
     depends_on:
       - user-auth
       - communication

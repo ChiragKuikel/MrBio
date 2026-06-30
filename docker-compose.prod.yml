@@ -75,7 +75,7 @@ services:
       dockerfile: Dockerfile
       args:
         APP: gateway
-    command: npm run gateway:start
+    command: node apps/gateway/dist/main.js
     ports:
       - "127.0.0.1:8081:3000"
     depends_on:
@@ -95,7 +95,7 @@ services:
     env_file:
       - ./mr-bio-service-mr-bio-setup/.env
       - ./mr-bio-service-mr-bio-setup/apps/user-auth/.env
-    command: npm run user-auth:start
+    command: node apps/user-auth/dist/main.js
 
   communication:
     <<: *backendDefaults
@@ -108,7 +108,7 @@ services:
     env_file:
       - ./mr-bio-service-mr-bio-setup/.env
       - ./mr-bio-service-mr-bio-setup/apps/communication/.env
-    command: npm run communication:start
+    command: node apps/communication/dist/main.js
     depends_on:
       - kafka
       - redis
@@ -124,7 +124,7 @@ services:
     env_file:
       - ./mr-bio-service-mr-bio-setup/.env
       - ./mr-bio-service-mr-bio-setup/apps/activity-log/.env
-    command: npm run activity-log:start
+    command: node apps/activity-log/dist/main.js
     depends_on:
       - kafka
 
@@ -139,6 +139,6 @@ services:
     env_file:
       - ./mr-bio-service-mr-bio-setup/.env
       - ./mr-bio-service-mr-bio-setup/apps/product/.env
-    command: npm run product:start
+    command: node apps/product/dist/main.js
     volumes:
       - product_assets:/app/apps/product/assets

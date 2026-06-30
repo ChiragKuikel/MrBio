@@ -78,6 +78,8 @@ services:
     command: node apps/gateway/server.js
     ports:
       - "127.0.0.1:8081:3000"
+    volumes:
+      - ./mr-bio-service-mr-bio-setup/apps/gateway/.env:/app/.env:ro
     depends_on:
       - user-auth
       - communication
@@ -92,10 +94,9 @@ services:
       dockerfile: Dockerfile
       args:
         APP: user-auth
-    env_file:
-      - ./mr-bio-service-mr-bio-setup/.env
-      - ./mr-bio-service-mr-bio-setup/apps/user-auth/.env
     command: node apps/user-auth/dist/main.js
+    volumes:
+      - ./mr-bio-service-mr-bio-setup/apps/user-auth/.env:/app/.env:ro
 
   communication:
     <<: *backendDefaults
@@ -105,10 +106,9 @@ services:
       dockerfile: Dockerfile
       args:
         APP: communication
-    env_file:
-      - ./mr-bio-service-mr-bio-setup/.env
-      - ./mr-bio-service-mr-bio-setup/apps/communication/.env
     command: node apps/communication/dist/main.js
+    volumes:
+      - ./mr-bio-service-mr-bio-setup/apps/communication/.env:/app/.env:ro
     depends_on:
       - kafka
       - redis
@@ -121,10 +121,9 @@ services:
       dockerfile: Dockerfile
       args:
         APP: activity-log
-    env_file:
-      - ./mr-bio-service-mr-bio-setup/.env
-      - ./mr-bio-service-mr-bio-setup/apps/activity-log/.env
     command: node apps/activity-log/dist/main.js
+    volumes:
+      - ./mr-bio-service-mr-bio-setup/apps/activity-log/.env:/app/.env:ro
     depends_on:
       - kafka
 
@@ -136,9 +135,7 @@ services:
       dockerfile: Dockerfile
       args:
         APP: product
-    env_file:
-      - ./mr-bio-service-mr-bio-setup/.env
-      - ./mr-bio-service-mr-bio-setup/apps/product/.env
     command: node apps/product/dist/main.js
     volumes:
+      - ./mr-bio-service-mr-bio-setup/apps/product/.env:/app/.env:ro
       - product_assets:/app/apps/product/assets
